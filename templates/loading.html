@@ -2,33 +2,59 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Strona_muzyczna </title>
-
-    <link href="../static/index.css" rel="stylesheet" type="text/css" />
+    <title>Witaj! Jestem Pan DJ!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js">
+    <lin rel="stylesheet" href="/static/index.css" type="text/css" />
     <style>
         body, html {
           height: 100%;
           margin: 0;
         }
-        
+/*
         .bg {
           background-image: url("../static/1.png");
-    
-          height: 100%; 
-        
+
+          height: 100%;
+
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
+        } */
+        .round_corners{
+          border-radius: 50px;
         }
         </style>
 
 
 </head>
-<body>
-    
- 
-    <div class="bg"></div>
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+<body class="w3-light-grey">
 
 
-</body>
+<!-- !PAGE CONTENT! -->
+<div class="w3-main">
+
+  <!-- Header -->
+  <header class="w3-container w3-center" style="padding-top:22px">
+    <h5><b><i class="fa fa-users"></i> Pan DJ</b></h5>
+  </header>
+
+    <form action="/login" style="text-align:center" method="POST">
+      <br>
+      <p class="w3-center">Wpisz swój nick:</p>
+      <input class="w3-border w3-padding round_corners" type="text" name="name" placeholder="Nazwa" required>
+      <input class="w3-button w3-theme round_corners" type="submit" value=">"><br><br>
+    </form>
+
+
+  <!-- End page content -->
+</div>
+
+
 </html>

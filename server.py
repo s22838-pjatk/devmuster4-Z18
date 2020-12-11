@@ -21,7 +21,7 @@ def index():
     if not session.get('logged_in'):
         return redirect('/login')
     else:
-        return render_template('index.html')
+        return render_template('loading.html')
 
 
 @app.route("/get_note")
