@@ -10,7 +10,8 @@ from mido import Message, MidiFile, MidiTrack
 
 
 app = Flask(__name__)
-app.secret_key = b"Pt\xce1^\xf0\xbc0\xbf'!\xbd"
+with open("secret.key", "rb") as f:
+    app.secret_key = f.read()
 
 fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
 
