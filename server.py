@@ -10,7 +10,8 @@ from mido import Message, MidiFile, MidiTrack
 
 
 app = Flask(__name__)
-app.secret_key = b"Pt\xce1^\xf0\xbc0\xbf'!\xbd"
+with open("secret.key", "rb") as f:
+    app.secret_key = f.read()
 
 fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
 
@@ -34,12 +35,12 @@ def get_note():
     track.append(Message('note_on', note=int(pitch), velocity=127, time=0))
     track.append(Message('note_off', note=int(pitch), velocity=127, time=int(length)))
 
-    mid.save(session.get('username/')+str(pitch)+'_'+str(length)+'.mid')
+    mid.save(session.get('username')+"/"+str(pitch)+'_'+str(length)+'.mid')
 
     # using the default sound font in 44100 Hz sample rate
     fs.midi_to_audio(
-        session.get('username/')+str(pitch)+'_'+str(length)+'.mid',
-        session.get('username/')+str(pitch)+'_'+str(length)+'.wav'
+        session.get('username')+"/"+str(pitch)+'_'+str(length)+'.mid',
+        session.get('username')+"/"+str(pitch)+'_'+str(length)+'.wav'
     )
 
     return render_template('index.html')
