@@ -26,10 +26,12 @@ def index():
 
 @app.route("/master_tape")
 def master_tape():
-    if not session.get('guide_passed'):
+    if not session.get('guide_passed') and session.get('logged_in'):
         return render_template('guide.html', username=session.get('username'))
-    else:
+    elif not session.get('guide_passed') and session.get('logged_in'):
         return render_template('master.html', username=session.get('username'))
+    else:
+        return redirect('/')
 
 
 @app.route("/get_note")
