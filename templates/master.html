@@ -98,7 +98,7 @@
 
         /* Modal Content/Box */
         .popup-content {
-          background-color: #fefefe;
+          background-image: linear-gradient(#dd0077, #bb0066);
           margin: 15% auto; /* 15% from the top and centered */
           padding: 20px;
           border: 1px solid #888;
@@ -120,7 +120,27 @@
           cursor: pointer;
         }
         .visible_td{
-          color: rgb(0,0,0);
+          color: #ffffff;
+        }
+        @media screen and (max-width : 400px)
+        {
+          #name_of_track
+          {
+            font-size:20px;
+          }
+          .icon{
+            height: 36px;
+          }
+        }
+        @media screen and (min-width : 401px)
+        {
+          #name_of_track
+          {
+            font-size:36px;
+          }
+          .icon{
+            height: 64px;
+          }
         }
         </style>
 
@@ -136,7 +156,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-right w3-quarter">
     <h1 class="w3-center"><b>Pan DJ</b></h1>
-    <p id="character" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p><br>
+    <p id="character" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p>
     <p id="playstop" class="w3-center"><img src="/static/playstop-256.png" style="padding:16px; width:186px" alt="Play/Stop">
   </div>
 <div class="w3-center w3-threequarter">
@@ -149,18 +169,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <div class="w3-container w3-center w3-padding-16" style="margin-right: 25px; margin-left: 25px; padding-right:56px; position: relative; background-image: linear-gradient(45deg, #642B09, #842A04, #331800);">
       <div class="w3-content">
         <div class-"w3-left"><img class="rotating" src="/static/roll-256.png" style="position: absolute; width:110px; left:-55px; top:-5px" alt="Tape"></div>
-        <div class="w3-center" style="padding-left:56px"><a style="display:inline-block; font-size: 20px">{{t[1]}}</a></div>
-        <div class="w3-center">
-          <a href="/del_track?no={{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/trashcan.png>&nbsp;&nbsp;</img></a>
-          <div id="track_edit{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/editicon.png></img>&nbsp;&nbsp;</div>
-          <div id="mute{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/muteicon.png>&nbsp;&nbsp;</img></div>
+        <div class="w3-center w3-half" style="padding-left:56px"><a id="name_of_track" style="display:inline-block">{{t[1]}}</a></div>
+        <div class="w3-center w3-half">
+          <a href="/del_track?no={{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img class="icon" src=/static/trashcan.png>&nbsp;&nbsp;</img></a>
+          <div id="track_edit{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img class="icon" src=/static/editicon.png></img>&nbsp;&nbsp;</div>
+          <div id="mute{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img class="icon" src=/static/muteicon.png>&nbsp;&nbsp;</img></div>
         </div>
         <div class-"w3-right" style="display: inline-block"><img class="rotating" src="/static/roll-256.png" style="position: absolute; width:110px; right:-55px; top:-5px" alt="Tape"></div>
       </div>
     </div><br><br>
     {% endfor %}
     <br>
-    <a id="add_new_track" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
+    <a id="add_new_track" class="w3-center" style="position: relative; text-align: center;"><img src='/static/redbtn.png' style="height: 72px"><span style="  position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">Dodaj taśmę</span></img></a>
     </div>
     <div id="edit" style="display:none; overflow-x: auto">
       <table id="edit_table" style="width:100%; height:100%">
@@ -186,8 +206,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="popup-content">
     <span class="close">&times;</span>
-    <h6 style="color:black">Wybierz rodzaj taśmy:</h6>
-    <table style="color:black; width:100%">
+    <h6>Wybierz rodzaj taśmy:</h6>
+    <table style="width:100%">
       <tr>
         <th>Krótkie (1/4)</th>
         <th>Średnie (1/2)</th>
@@ -259,7 +279,7 @@ function player() {
     };
   }
   row+= 1;
-  if(row==track_length){
+  if(row>=track_length){
     row=0;
   }
   if(row1==8){
@@ -291,7 +311,7 @@ function player_common() {
   row1_common+= 1;
   row2_common+= 1;
   row3_common+= 1;
-  if(row_common==track_length){
+  if(row_common>=track_length){
     row_common=0;
   }
   if(row1_common==8){
@@ -326,17 +346,9 @@ $("#track_edit{{t[0]}}").click(function() {
   else{
     track_length = 16;
   }
+  size_update();
   for(i=0;i<pattern[current_track-1].length; i++){
     $("#td"+pattern[current_track-1][i][0]+"_"+pattern[current_track-1][i][1]).css({"background-color": "red"});
-  }
-  for(i=0;i<max_columns;i++){
-    if(i>=track_length){
-      $( "#th"+i ).css({"display":"none"})
-      $( "#tr"+i ).css({"display":"none"})
-      for(j=0;j<samples_number;j++){
-        $( "#td"+i+"_"+j ).css({"display":"none"})
-      }
-    }
   }
 });
 $("#playstop").unbind().click(function() {
@@ -348,6 +360,7 @@ $("#back").click(function() {
   current_track = 0;
   $("#bubble").css({'display': 'block'});
   $("#edit").css({'display': 'none'});
+  size_update();
   for(i=0;i<samples_number;i++){
     for(j=0;j<track_length;j++){
         $('#th' + j).css({"background-color":"rgba(0, 0, 0, 0)"});
@@ -376,6 +389,24 @@ $("#add_new_track").click(function() {
   popup.style.display = "block";
 });
 
+function size_update() {
+  for(i=0;i<max_columns;i++){
+    if(i>=track_length){
+      $( "#th"+i ).css({"display":"none"});
+      $( "#tr"+i ).css({"display":"none"});
+      for(j=0;j<samples_number;j++){
+        $( "#td"+i+"_"+j ).css({"display":"none"});
+      }
+    } else{
+      $( "#th"+i ).css({"display":"table-cell"});
+      $( "#tr"+i ).css({"display":"table-row"});
+      for(j=0;j<samples_number;j++){
+        $( "#td"+i+"_"+j ).css({"display":"table-cell"});
+      }
+    }
+  }
+  console.log(track_length);
+}
 
 span.onclick = function() {
   popup.style.display = "none";
@@ -443,6 +474,8 @@ $("#mute8").click(function() {
     muted_tracks.splice(muted_tracks.indexOf(7),1);
   }
 });
+
+var size_updater = setInterval(size_update, 1000);
 
 
 </script>
