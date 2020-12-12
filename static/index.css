@@ -1,69 +1,111 @@
 html, body {
-    background-color: #fff;
-    color: #000;
-    margin-top: 50px;
-    padding: 0;
-    width: auto;
-    background-color:white;
+  background-color: #fff;
+  color: #000;
+  margin-top: 50px;
+  padding: 0;
+  width: auto;
+  background-color:white;
 }
 
-
+/* changa-regular - latin-ext_latin */
+@font-face {
+font-family: 'Changa';
+font-style: normal;
+font-weight: 400;
+src: local(''),
+     url('/static/changa-v10-latin-ext_latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+     url('/static/changa-v10-latin-ext_latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* changa-500 - latin-ext_latin */
+@font-face {
+font-family: 'Changa';
+font-style: normal;
+font-weight: 500;
+src: local(''),
+     url('/static/changa-v10-latin-ext_latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+     url('/static/changa-v10-latin-ext_latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* changa-600 - latin-ext_latin */
+@font-face {
+font-family: 'Changa';
+font-style: normal;
+font-weight: 600;
+src: local(''),
+     url('/static/changa-v10-latin-ext_latin-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+     url('/static/changa-v10-latin-ext_latin-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* changa-700 - latin-ext_latin */
+@font-face {
+font-family: 'Changa';
+font-style: normal;
+font-weight: 700;
+src: local(''),
+     url('/static/changa-v10-latin-ext_latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+     url('/static/changa-v10-latin-ext_latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* changa-800 - latin-ext_latin */
+@font-face {
+font-family: 'Changa';
+font-style: normal;
+font-weight: 800;
+src: local(''),
+     url('/static/changa-v10-latin-ext_latin-800.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+     url('/static/changa-v10-latin-ext_latin-800.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
 
 #container {
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color:white;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color:white;
 }
 
 #logo {
-    color: #000;
-    font-size: xx-large;
+  color: #000;
+  font-size: xx-large;
 }
 h1 {
-    display: block;
-    text-align: center;
-    font-size: 5em;
+  display: block;
+  text-align: center;
+  font-size: 5em;
 
-    margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;
-  }
-  #title{
-    height: 100px;
-  }
-  #window{
-      background-color: #000;
-      height: 600px;
-      border-radius: 6px;
-  }
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+#title{
+  height: 100px;
+}
+#window{
+    background-color: #000;
+    height: 600px;
+    border-radius: 6px;
+}
 
 
-  .dot {
-    height: 25px;
-    width: 25px;
-    background-color: blue;
-    border-radius: 50%;
-    display: inline-block;
-  }
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-  div.absolute {
-    position: absolute;
-    top: 80px;
-    right: 0;
-    width: 200px;
-    height: 100px;
+div.absolute {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 200px;
+  height: 100px;
 
-  }
+}
 
-  tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
 .tg .tg-eqm3{border-color:inherit;font-size:20px;text-align:left;vertical-align:top}
 .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 
 .tg {width:100%; height:100%}
-
-
