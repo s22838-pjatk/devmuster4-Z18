@@ -14,6 +14,9 @@
         border: 1px solid black;
         border-collapse: collapse;
       }
+      td{
+        color:rgba(0,0,0,0);
+      }
         body, html {
           height: 100%;
           margin: 0;
@@ -132,7 +135,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </div>
 <script>
 var current_track = 0;
-var pattern = [];
+var pattern = [{% for t in tracks %}{{t[3]}}, {% endfor %}];
+track_length = 16;
+console.log(pattern);
 var stop = false;
 var row = 0;
 function player() {
@@ -140,7 +145,7 @@ function player() {
   for(i=0;i<8;i++){
     console.log($('#td' + row.toString()+"_"+i.toString()).css("background-color"));
     if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
-        var audio = new Audio('/static/test.wav');
+        var audio = new Audio('/static/'+row+'.wav');
         audio.play();
       };
     };
@@ -153,13 +158,15 @@ function player() {
 var player_start = setInterval(player, 100);
 $(document).ready(function() {
   $("#main").animate({opacity: 1});
-  $("#td1_1").css({"background-color": "red"});
 });
 {% for t in tracks %}
 $("#track_edit{{t[0]}}").click(function() {
   current_track = {{t[0]}};
   $("#bubble").css({'display': 'none'});
   $("#edit").css({'display': 'block'});
+  for(i=0;i<pattern[current_track-1].length; i++){
+    $("#td"+pattern[current_track-1][i][0]+"_"+pattern[current_track-1][i][1]).css({"background-color": "red"});
+  }
 });
 $("#playstop").unbind().click(function() {
   stop = !stop;
