@@ -29,6 +29,7 @@ def master_tape():
     if not session.get('guide_passed') and session.get('logged_in'):
         return render_template('guide.html', username=session.get('name'))
     elif session.get('guide_passed') and session.get('logged_in'):
+        session['level'] = 1
         return render_template('master.html', username=session.get('name'), tracks=session.get('tracks'))
     else:
         return redirect('/')
@@ -89,7 +90,7 @@ def sync_3():
 @app.route("/del_track")
 def del_track():
     no = request.args.get('no')
-    if session.get('guide_passed') and session.get('logged_in'):
+    if session.get('logged_in'):
         session_tracks = session.get('tracks')
         for i in session_tracks:
             if i[0]==int(no):
@@ -102,12 +103,17 @@ def del_track():
 
 @app.route("/guide_done")
 def guide_done():
-    if not session.get('guide_passed') and session.get('logged_in'):
+    if session.get('logged_in'):
         session['guide_passed'] = True
         session['tracks'] = []
         return redirect('/master_tape')
     else:
         return redirect('/')
+
+@app.route("/guide")
+def guide():
+    if session.get('logged_in'):
+        return render_template('guide.html', username=session.get('name'))
 
 
 @app.route("/get_note")

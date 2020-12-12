@@ -35,7 +35,7 @@
         }
         .speech-bubble {
         	position: relative;
-          /* background: rgba(0,0,0,0.5); */
+          background: rgba(255,255,255,0.3);
         	border-radius: .4em;
         }
 
@@ -166,7 +166,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-right w3-quarter">
     <h1 class="w3-center"><b>Pan DJ</b></h1>
-    <p id="character" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p>
+    <p id="character" class="w3-center"><img id="help" src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p>
     <p id="playstop" class="w3-center"><img src="/static/playstop-256.png" style="padding:16px; width:186px" alt="Play/Stop">
   </div>
 <div class="w3-center w3-threequarter">
@@ -248,16 +248,52 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 
+<div id="guide" class="popup">
+
+  <div class="popup-content" style="height:40%">
+    <span class="close">&times;</span>
+    <h1>Witaj ponownie!</h1>
+    <div class="w3-container w3-twothird">
+      <h3>W czym mogę Ci pomóc?</h3>
+      <div id="quest" class="w3-button">Przypomnij mi zadanie</div><br>
+      <div class="w3-button">Nie daję rady, pomóż mi</div><br>
+      <a href="/guide" class="w3-button">Wróćmy na chwilę do samouczka</a><br>
+    </div>
+    <div class="w3-container w3-third"><p id="character-help" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p></div>
+  </div>
+
+</div>
+
+<div id="quest" class="popup">
+
+  <div class="popup-content" style="height:40%">
+    <span class="close">&times;</span>
+    <h1>Witaj, {{username}}!</h1>
+    <div class="w3-container w3-twothird">
+      <h3>Oto Twoje pierwsze zadanie</h3>
+      <p>Usłyszysz dwukrotnie prost melodię. Spróbuj odwzorować ją na samplerze. </p><br>
+      <a id="quest_player" class="w3-button">Odtwórz</a>
+    </div>
+    <div class="w3-container w3-third"><p id="character-help" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p></div>
+  </div>
+
+</div>
+
 
 </div>
 <script>
 var note_length = 250;
 var head_mode = 0;
 var muted_tracks = [];
+var silent_tracks = [];
 var track_length = 16;
 var max_columns = 32;
 var popup = document.getElementsByClassName("popup")[0];
 var span = document.getElementsByClassName("close")[0];
+var popup2 = document.getElementsByClassName("popup")[1];
+var span2 = document.getElementsByClassName("close")[1];
+var popup3 = document.getElementsByClassName("popup")[2];
+var span3 = document.getElementsByClassName("close")[2];
 var current_track = 0;
 var track_instruments = [{% for t in tracks %}{{t[2]}}, {% endfor %}];
 var track_timings = [{% for t in tracks %}{{t[4]}}, {% endfor %}];
@@ -319,20 +355,21 @@ function player_common() {
       for (i=0;i<pattern.length;i++){
         for(j=0;j<pattern[i].length;j++){
           if(row1_common == pattern[i][j][0] && track_timings[i] ==8 || row2_common == pattern[i][j][0] && track_timings[i] ==16 || row3_common == pattern[i][j][0] && track_timings[i] ==32){
-            if(!muted_tracks.includes(i)){
-                if(pattern[i][j][2]==0){
+            if(!muted_tracks.includes(i) && !silent_tracks.includes(i)){
+                if(pattern[i][j][3]==0){
                 var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+'.wav');
                 audio.play();
               };
                 var duration = note_length;
-                console.log(pattern[i][j][3]);
                 if(pattern[i][j][3]==1){
+                  if(typeof pattern[i][j+1] != 'undefined'){
                     if(pattern[i][j][3]==1){
                       duration *= 2;
                     }
-                    var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+"_"+duration+'.wav');
-                    audio.play();
+                      var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+"_"+duration+'.wav');
+                      audio.play();
                   };
+                  }
             }
           }
         }
@@ -386,8 +423,7 @@ $("#track_edit{{t[0]}}").click(function() {
   }
   size_update();
   for(i=0;i<pattern[current_track-1].length; i++){
-    console.log(pattern);
-    if(pattern[current_track-1][i][2] == 0){
+    if(pattern[current_track-1][i][3] == 0){
       $("#td"+pattern[current_track-1][i][0]+"_"+pattern[current_track-1][i][1]).css({"background-color": "red"});
     } else{
       $("#td"+pattern[current_track-1][i][0]+"_"+pattern[current_track-1][i][1]).css({"background-color": "rgb(255, 165, 0)"});
@@ -415,7 +451,7 @@ $("td").click(function() {
   if(head_mode==0){
     var item = $(this).closest("td").text().split("/");
     $("#td"+item[1]+"_"+item[0]).css({"background-color": "red"});
-    pattern[current_track-1].push([item[1], item[0], 0]);
+    pattern[current_track-1].push([item[1], item[0], note_length, 0]);
     var postData = {
       track: current_track,
       append0: item[1],
@@ -423,16 +459,15 @@ $("td").click(function() {
       time: note_length
     }
     $.ajax({
-    url: "/sync_3",
+    url: "/sync",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify(postData),
-    success: function(data){console.log('success')}
 });
 } else if(head_mode==1){
   var item = $(this).closest("td").text().split("/");
   $("#td"+item[1]+"_"+item[0]).css({"background-color": "rgb(255, 165, 0)"});
-  pattern[current_track-1].push([item[1], item[0], 1]);
+  pattern[current_track-1].push([item[1], item[0], note_length, 1]);
   var postData = {
     track: current_track,
     append0: item[1],
@@ -440,11 +475,10 @@ $("td").click(function() {
     time: note_length
   }
   $.ajax({
-  url: "/sync",
+  url: "/sync_3",
   type: "POST",
   contentType: "application/json",
   data: JSON.stringify(postData),
-  success: function(data){console.log('success')}
 });
 } else{
   var item = $(this).closest("td").text().split("/");
@@ -465,21 +499,26 @@ $("td").click(function() {
   type: "POST",
   contentType: "application/json",
   data: JSON.stringify(postData),
-  success: function(data){console.log('success')}
 });
 }
 });
 $("#add_new_track").click(function() {
   popup.style.display = "block";
 });
+$("#help").click(function() {
+  popup2.style.display = "block";
+});
+$("#quest").click(function() {
+  popup3.style.display = "block";
+});
 
 function size_update() {
-  console.log(current_track);
-  console.log(muted_tracks);
   if(current_track!=0){
     for(x=1;x<=pattern.length;x++){
-      if(x!=current_track){
-        muted_tracks.push(x);
+      if(x==current_track){
+        if(!muted_tracks.includes(x)){
+          muted_tracks.push(x);
+        }
       }
     }
   } else{
@@ -500,73 +539,85 @@ function size_update() {
       }
     }
   }
-  console.log(track_length);
 }
 
 span.onclick = function() {
   popup.style.display = "none";
+}
+span2.onclick = function() {
+  popup2.style.display = "none";
+}
+span3.onclick = function() {
+  popup3.style.display = "none";
 }
 
 window.onclick = function(event) {
   if (event.target == popup) {
     popup.style.display = "none";
   }
+  if (event.target == popup2) {
+    popup2.style.display = "none";
+  }
+
+  if (event.target == popup3) {
+    popup3.style.display = "none";
+  }
 }
 
 $("#mute1").click(function() {
-  if(!muted_tracks.includes(0)){
-    muted_tracks.push(0);
+  if(!silent_tracks.includes(0)){
+    silent_tracks.push(0);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(0),1);
+    silent_tracks.splice(silent_tracks.indexOf(0),1);
   }
 });
 $("#mute2").click(function() {
-  if(!muted_tracks.includes(1)){
-    muted_tracks.push(1);
+  if(!silent_tracks.includes(1)){
+    silent_tracks.push(1);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(1),1);
+    silent_tracks.splice(silent_tracks.indexOf(1),1);
   }
 });
 $("#mute3").click(function() {
-  if(!muted_tracks.includes(2)){
-    muted_tracks.push(2);
+  if(!silent_tracks.includes(2)){
+    silent_tracks.push(2);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(2),1);
+    silent_tracks.splice(silent_tracks.indexOf(2),1);
   }
 });
 $("#mute4").click(function() {
-  if(!muted_tracks.includes(3)){
-    muted_tracks.push(3);
+  if(!silent_tracks.includes(3)){
+    silent_tracks.push(3);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(3),1);
+    silent_tracks.splice(silent_tracks.indexOf(3),1);
   }
 });
 $("#mute5").click(function() {
-  if(!muted_tracks.includes(4)){
-    muted_tracks.push(4);
+  if(!silent_tracks.includes(4)){
+    silent_tracks.push(4);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(4),1);
+    silent_tracks.splice(silent_tracks.indexOf(4),1);
   }
 });
 $("#mute6").click(function() {
-  if(!muted_tracks.includes(5)){
-    muted_tracks.push(5);
+  if(!silent_tracks.includes(5)){
+    silent_tracks.push(5);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(5),1);
+    silent_tracks.splice(silent_tracks.indexOf(5),1);
   }
 });
 $("#mute7").click(function() {
-  if(!muted_tracks.includes(6)){
-    muted_tracks.push(6);
+  if(!silent_tracks.includes(6)){
+    silent_tracks.push(6);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(6),1);
+    silent_tracks.splice(silent_tracks.indexOf(6),1);
   }
 });
 $("#mute8").click(function() {
-  if(!muted_tracks.includes(7)){
-    muted_tracks.push(7);
+  if(!silent_tracks.includes(7)){
+    silent_tracks.push(7);
   } else{
-    muted_tracks.splice(muted_tracks.indexOf(7),1);
+    silent_tracks.splice(silent_tracks.indexOf(7),1);
   }
 });
 
@@ -599,7 +650,10 @@ $("#head3").click(function() {
   $("#head1").css({"color":"#000000"});
     head_mode = 2;
 });
-
+$("#quest_player").click(function() {
+  var audio = new Audio('/static/audio/first_quest.wav');
+  audio.play();
+});
 </script>
 
 </html>
