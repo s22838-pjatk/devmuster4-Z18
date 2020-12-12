@@ -9,11 +9,11 @@
 <script>
 function generate_table() {
 
-var window = document.getElementById("window")[0];
+var window = document.getElementById("window");
 var oldTab=document.getElementById("tab1");
 
 if(oldTab!=null){
-    body.removeChild(oldTab);
+  window.removeChild(oldTab);
   }
  var tbl = document.createElement("table");
  tbl.id="tab1";
