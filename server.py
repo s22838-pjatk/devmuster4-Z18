@@ -27,9 +27,10 @@ def index():
 @app.route("/master_tape")
 def master_tape():
     if not session.get('guide_passed') and session.get('logged_in'):
-        return render_template('guide.html', username=session.get('username'))
+        return render_template('guide.html', username=session.get('name'))
     elif session.get('guide_passed') and session.get('logged_in'):
-        return render_template('master.html', username=session.get('username'))
+        session['tracks'] = []
+        return render_template('master.html', username=session.get('name'))
     else:
         return redirect('/')
 
@@ -71,7 +72,7 @@ def login():
         return redirect('/')
     else:
         session['logged_in'] = True
-        session['name'] = request.args.get('name')
+        session['name'] = request.form['name']
         return redirect('/')
 
 
