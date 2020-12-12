@@ -63,7 +63,7 @@ def sync():
     result = []
     data = request.get_json()
     session_tracks = session.get('tracks')
-    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1']), int(data['time'])])
+    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1']), int(data['time']), 0])
     session['tracks'] = session_tracks
     return redirect("/master_tape")
 
@@ -72,7 +72,16 @@ def sync_2():
     result = []
     data = request.get_json()
     session_tracks = session.get('tracks')
-    session_tracks[data['track']-1][3].remove([int(data['remove0']), int(data['remove1']), int(data['time'])])
+    session_tracks[data['track']-1][3].remove([int(data['remove0']), int(data['remove1']), int(data['time']), 0])
+    session['tracks'] = session_tracks
+    return redirect("/master_tape")
+
+@app.route("/sync_3", methods=['POST'])
+def sync_3():
+    result = []
+    data = request.get_json()
+    session_tracks = session.get('tracks')
+    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1']), int(data['time']), 1])
     session['tracks'] = session_tracks
     return redirect("/master_tape")
 
@@ -103,7 +112,7 @@ def guide_done():
 
 @app.route("/get_note")
 def get_note():
-    length = request.args.get('length')
+    length = int(request.args.get('length'))
 
     for i in range(24):
         mid = MidiFile()
@@ -121,7 +130,7 @@ def get_note():
         fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
         fs.midi_to_audio('temp.mid', "static/audio/piano/"+str(i)+"_"+str(length)+'.wav')
 
-    return render_template('index.html')
+    return redirect('/')
 
 
 @app.route("/login", methods=['POST', 'GET'])
