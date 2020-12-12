@@ -29,8 +29,18 @@ def master_tape():
     if not session.get('guide_passed') and session.get('logged_in'):
         return render_template('guide.html', username=session.get('name'))
     elif session.get('guide_passed') and session.get('logged_in'):
-        session['tracks'] = []
-        return render_template('master.html', username=session.get('name'))
+        print(session['tracks'])
+        return render_template('master.html', username=session.get('name'), tracks=session['tracks'])
+    else:
+        return redirect('/')
+
+
+@app.route("/new_track")
+def new_track():
+    if session.get('guide_passed') and session.get('logged_in'):
+        session['tracks'].append([len(session['tracks'])+1, 'Taśma '+str(len(session['tracks'])+1),[]])
+        print(session['tracks'])
+        return redirect("/master_tape")
     else:
         return redirect('/')
 
@@ -39,6 +49,7 @@ def master_tape():
 def guide_done():
     if not session.get('guide_passed') and session.get('logged_in'):
         session['guide_passed'] = True
+        session['tracks'] = [[1, 'Taśma 1', []]]
         return redirect('/master_tape')
     else:
         return redirect('/')
