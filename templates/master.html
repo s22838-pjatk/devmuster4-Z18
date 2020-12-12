@@ -70,6 +70,43 @@
         #playstop {
           cursor: pointer;
         }
+                /* The Modal (background) */
+        .popup {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .popup-content {
+          background-color: #fefefe;
+          margin: 15% auto; /* 15% from the top and centered */
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
         </style>
 
 
@@ -88,7 +125,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <p id="playstop" class="w3-center"><img src="/static/playstop-256.png" style="padding:16px; width:186px" alt="Play/Stop">
   </div>
 <div class="w3-center w3-threequarter">
-  <div class="w3-content w3-padding-16 speech-bubble" style="color:white; overflow: auto; padding-left: 32px; padding-right:32px; max-height:85vh; margin-top:5%">
+  <div class="w3-content w3-padding-16 speech-bubble" style="color:white; overflow-x: hidden; overflow-y: auto; padding-left: 32px; padding-right:32px; max-height:85vh; margin-top:5%">
     <div>
       <h4>Ścieżka Master użytkownika {{username}}</h4>
     </div>
@@ -108,7 +145,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div><br><br>
     {% endfor %}
     <br>
-    <a href="/new_track" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
+    <a href="/new_track?type=0" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
     </div>
     <div id="edit" style="display:none">
       <table style="width:100%; height:100%">
@@ -126,21 +163,33 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         {% endfor %}
     </table>
     <br>
-    <a id="go_back" class="w3-center round_corners w3-white w3-button">Wróć</a>
+    <a id="back" class="w3-center round_corners w3-red w3-button">Wróć</a>
     </div>
   </div>
+</div>
+<div id="type_of_track" class="popup">
+
+  <!-- Modal content -->
+  <div class="popup-content">
+    <span class="close">&times;</span>
+    <p>Wybierz rodzaj taśmy:</p>
+  </div>
+
 </div>
 
 
 </div>
 <script>
 var current_track = 0;
+var track_instruments = [{% for t in tracks %}{{t[2]}}, {% endfor %}];
 var pattern = [{% for t in tracks %}{{t[3]}}, {% endfor %}];
 var track_length = 16;
 var samples_number = 12;
 var stop = false;
 var row = 0;
+var row_common = 0;
 var octave = [1,3,6,8,10];
+var instruments = ['piano', 'sax']
 function player() {
   if(stop != 1){
   for(i=0;i<samples_number;i++){
@@ -152,7 +201,7 @@ function player() {
     }
     $('#th' + row.toString()).css({"background-color":"rgb(0, 0, 255)"});
     if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
-        var audio = new Audio('/static/audio/piano/'+(samples_number-i-1)+'.wav');
+        var audio = new Audio('/static/audio/'+instruments[track_instruments[current_track-1]]+'/'+(samples_number-i-1)+'.wav');
         audio.play();
       };
     };
@@ -162,7 +211,26 @@ function player() {
     row=0;
   }
 }
-var player_start = setInterval(player, 500);
+function player_common() {
+  if(stop != 1){
+    if(current_track==0){
+      for (i=0;i<pattern.length;i++){
+        for(j=0;j<pattern[i].length;j++){
+          if(row_common == pattern[i][j][0]){
+            var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+'.wav');
+            audio.play();
+          }
+        }
+      }
+    }
+  }
+  row_common+= 1;
+  if(row_common==track_length){
+    row_common=0;
+  }
+}
+var player_start = setInterval(player, 250);
+var player_common_start = setInterval(player_common, 250);
 $(document).ready(function() {
   $("#main").animate({opacity: 1});
 });
@@ -180,10 +248,16 @@ $("#playstop").unbind().click(function() {
 });
 
 {% endfor %}
-$("#go_back").click(function() {
+$("#back").click(function() {
   current_track = 0;
   $("#bubble").css({'display': 'block'});
   $("#edit").css({'display': 'none'});
+  for(i=0;i<samples_number;i++){
+    for(j=0;j<track_length;j++){
+        $('#th' + j).css({"background-color":"rgba(0, 0, 0, 0)"});
+        $('#td'+i+"_" + j).css({"background-color":"rgba(0, 0, 0, 0)"});
+      }
+    }
 });
 $("td").click(function() {
     var item = $(this).closest("td").text().split("/");

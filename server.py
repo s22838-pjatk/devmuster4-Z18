@@ -38,6 +38,7 @@ def master_tape():
 def new_track():
     if session.get('guide_passed') and session.get('logged_in'):
         if len(session.get('tracks'))<4:
+            type = request.args.get('type')
             session_tracks = session.get('tracks')
             track_nrs = []
             for i in session_tracks:
@@ -46,7 +47,7 @@ def new_track():
                 val = max(track_nrs)+1
             else:
                 val = 1
-            session_tracks.append([val, 'Taśma '+str(val),0,[]])
+            session_tracks.append([val, 'Taśma '+str(val),int(type),[]])
             session['tracks'] = session_tracks
             return redirect("/master_tape")
         else:
