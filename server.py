@@ -29,8 +29,7 @@ def master_tape():
     if not session.get('guide_passed') and session.get('logged_in'):
         return render_template('guide.html', username=session.get('name'))
     elif session.get('guide_passed') and session.get('logged_in'):
-        print(session['tracks'])
-        return render_template('master.html', username=session.get('name'), tracks=session['tracks'])
+        return render_template('master.html', username=session.get('name'), tracks=session.get('tracks'))
     else:
         return redirect('/')
 
@@ -38,8 +37,26 @@ def master_tape():
 @app.route("/new_track")
 def new_track():
     if session.get('guide_passed') and session.get('logged_in'):
-        session['tracks'].append([len(session['tracks'])+1, 'Taśma '+str(len(session['tracks'])+1),[]])
-        print(session['tracks'])
+        if len(session.get('tracks'))<4:
+            session_tracks = session.get('tracks')
+            session_tracks.append([len(session['tracks'])+1, 'Taśma '+str(len(session.get('tracks'))+1),[]])
+            session['tracks'] = session_tracks
+            return redirect("/master_tape")
+        else:
+            return render_template('master.html', username=session.get('name'), tracks=session.get('tracks'), err=1)
+    else:
+        return redirect('/')
+
+
+@app.route("/del_track")
+def del_track():
+    no = request.args.get('no')
+    if session.get('guide_passed') and session.get('logged_in'):
+        session_tracks = session.get('tracks')
+        for i in session_tracks:
+            if i[0]==int(no):
+                session_tracks.remove(i)
+        session['tracks'] = session_tracks
         return redirect("/master_tape")
     else:
         return redirect('/')
