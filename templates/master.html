@@ -130,44 +130,56 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <script>
 var current_track = 0;
 var pattern = [];
-var stop = 0;
+var stop = false;
 var row = 0;
-$(document).ready(function() {
-  $("#main").animate({opacity: 1});
-  function player() {
-    for(i=0;i<8;i++){
-      if($('#td' + row.toString()+"_"+i.toString()).css("background_color")=="red"){
+function player() {
+  to_stop = false;
+  for(i=0;i<8;i++){
+    console.log($('#td' + row.toString()+"_"+i.toString()).css("background-color"));
+    if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
+      if(stop == 1){
+        to_stop=true;
+      }
+      if(to_stop!=true){
         var audio = new Audio('/static/test.wav');
         audio.play();
-      };
-    }
-    row+= 1;
-    if(row==8){
-      row=0;
-    }
+      }
+    };
   }
-  $("#td1_1").css({"background_color": "red"});
-  var myVar = setInterval(player, 1000);
+  row+= 1;
+  if(row==8){
+    row=0;
+  }
+}
+var player_start = setInterval(player, 100);
+$(document).ready(function() {
+  $("#main").animate({opacity: 1});
+  $("#td1_1").css({"background-color": "red"});
 });
 {% for t in tracks %}
 $("#track_edit{{t[0]}}").click(function() {
   current_track = {{t[0]}};
   $("#bubble").css({'display': 'none'});
   $("#edit").css({'display': 'block'});
-  console.log(current_track);
 });
+$("#playstop").unbind().click(function() {
+  stop = !stop;
+  if(stop==true){
+    clearInterval(player_start);
+  } else{
+    setInterval(player, 100);
+  }
+  console.log(stop);
+});
+
 {% endfor %}
 $("#go_back").click(function() {
   current_track = 0;
   $("#bubble").css({'display': 'block'});
   $("#edit").css({'display': 'none'});
-  console.log(current_track);
 });
 $("td").click(function() {
-    var item = $(this).closest("td")   // Finds the closest row <tr>
-                       .text();         // Retrieves the text within <td>
-
-    console.log(item);
+    var item = $(this).closest("td").text();
 });
 </script>
 
