@@ -107,6 +107,9 @@
           text-decoration: none;
           cursor: pointer;
         }
+        .visible_td{
+          color: rgb(0,0,0);
+        }
         </style>
 
 
@@ -145,7 +148,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div><br><br>
     {% endfor %}
     <br>
-    <a href="/new_track?type=0" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
+    <a id="add_new_track" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
     </div>
     <div id="edit" style="display:none">
       <table style="width:100%; height:100%">
@@ -169,10 +172,31 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </div>
 <div id="type_of_track" class="popup">
 
-  <!-- Modal content -->
   <div class="popup-content">
     <span class="close">&times;</span>
-    <p>Wybierz rodzaj taśmy:</p>
+    <h6 style="color:black">Wybierz rodzaj taśmy:</h6>
+    <table style="color:black; width:100%">
+      <tr>
+        <th>Krótkie (1/4)</th>
+        <th>Średnie (1/2)</th>
+        <th>Długie (1/1)</th>
+      </tr>
+      <tr>
+        <td class="visible_td">Pianino</td>
+        <td class="visible_td">Pianino</td>
+        <td class="visible_td">Pianino</td>
+      </tr>
+      <tr>
+        <td class="visible_td">Saksofon</td>
+        <td class="visible_td">Saksofon</td>
+        <td class="visible_td">Saksofon</td>
+      </tr>
+      <tr>
+        <td class="visible_td">Bębny</td>
+        <td class="visible_td">Bębny</td>
+        <td class="visible_td">Bębny</td>
+      </tr>
+    </table>
   </div>
 
 </div>
@@ -180,6 +204,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 <script>
+var popup = document.getElementsByClassName("popup")[0];
+var span = document.getElementsByClassName("close")[0];
 var current_track = 0;
 var track_instruments = [{% for t in tracks %}{{t[2]}}, {% endfor %}];
 var pattern = [{% for t in tracks %}{{t[3]}}, {% endfor %}];
@@ -188,8 +214,14 @@ var samples_number = 12;
 var stop = false;
 var row = 0;
 var row_common = 0;
+var row1 = 0;
+var row1_common = 0;
+var row2 = 0;
+var row2_common = 0;
+var row3 = 0;
+var row3_common = 0;
 var octave = [1,3,6,8,10];
-var instruments = ['piano', 'sax']
+var instruments = ['piano', 'sax', 'guitar']
 function player() {
   if(stop != 1){
   for(i=0;i<samples_number;i++){
@@ -210,6 +242,15 @@ function player() {
   if(row==track_length){
     row=0;
   }
+  if(row1==track_length/2){
+    row1=0;
+  }
+  if(row2==track_length){
+    row2=0;
+  }
+  if(row3==track_length*2){
+    row3=0;
+  }
 }
 function player_common() {
   if(stop != 1){
@@ -225,8 +266,20 @@ function player_common() {
     }
   }
   row_common+= 1;
+  row1_common+= 1;
+  row2_common+= 1;
+  row3_common+= 1;
   if(row_common==track_length){
     row_common=0;
+  }
+  if(row1_common==track_length/2){
+    row1_common=0;
+  }
+  if(row2_common==track_length){
+    row2_common=0;
+  }
+  if(row3_common==track_length*2){
+    row3_common=0;
   }
 }
 var player_start = setInterval(player, 250);
@@ -276,6 +329,21 @@ $("td").click(function() {
     success: function(data){console.log('success')}
 });
 });
+$("#add_new_track").click(function() {
+  popup.style.display = "block";
+});
+
+
+span.onclick = function() {
+  popup.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == popup) {
+    popup.style.display = "none";
+  }
+}
+
 </script>
 
 </html>
