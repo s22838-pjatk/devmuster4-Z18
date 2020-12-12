@@ -405,7 +405,7 @@ $("td").click(function() {
 });
 } else if(head_mode==1){
   var item = $(this).closest("td").text().split("/");
-  $("#td"+item[1]+"_"+item[0]).css({"background-color": "orange"});
+  $("#td"+item[1]+"_"+item[0]).css({"background-color": "red"});
   pattern[current_track-1].push([item[1], item[0]]);
   var postData = {
     track: current_track,
@@ -422,7 +422,11 @@ $("td").click(function() {
 } else{
   var item = $(this).closest("td").text().split("/");
   $("#td"+item[1]+"_"+item[0]).css({"background-color": "rgba(0,0,0,0)"});
-    pattern[current_track-1].splice(pattern[current_track-1].indexOf([item[1], item[0]]),0);
+  for (var i = pattern[current_track-1].length - 1; i >= 0; i--) {
+   if (pattern[current_track-1][i][0] == parseInt(item[1]) && pattern[current_track-1][i][1] == parseInt(item[0])) {
+    pattern[current_track-1].splice(i, 1);
+   }
+  }
   var postData = {
     track: current_track,
     remove0: item[1],

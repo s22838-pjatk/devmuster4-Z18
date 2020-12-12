@@ -64,14 +64,17 @@ def sync():
     data = request.get_json()
     session_tracks = session.get('tracks')
     session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1'])])
+    print(session_tracks)
     session['tracks'] = session_tracks
     return redirect("/master_tape")
+
 @app.route("/sync_2", methods=['POST'])
 def sync_2():
     result = []
     data = request.get_json()
     session_tracks = session.get('tracks')
     session_tracks[data['track']-1][3].remove([int(data['remove0']), int(data['remove1'])])
+    print(session_tracks)
     session['tracks'] = session_tracks
     return redirect("/master_tape")
 
