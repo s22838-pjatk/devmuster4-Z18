@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask, render_template, redirect, request, send_from_directory, jsonify, session
-import glob, os
+import glob
 import time
 import threading
 from pydub import AudioSegment
@@ -19,9 +19,9 @@ fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
 @app.route("/")
 def index():
     if not session.get('logged_in'):
-        return redirect('/login')
-    else:
         return render_template('loading.html')
+    else:
+        return redirect('/master_tape')
 
 
 @app.route("/get_note")
@@ -46,7 +46,7 @@ def get_note():
     return render_template('index.html')
 
 
-@app.route("/login")
+@app.route("/login", methods=['POST', 'GET'])
 def login():
     if session.get('logged_in'):
         return redirect('/')
