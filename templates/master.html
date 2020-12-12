@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="/static/index.css" type="text/css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js"></script>
+    <script type="text/javascript">
+    function getNewTrack()
+    {
+        var url = document.getElementById('list').value;
+        var instrument = document.querySelector('input[name="instrument"]:checked').value;
+        if(url != 'none') {
+            window.location.replace("/new_track?type="+instrument+"&length="+url);
+        }
+    }
+</script>
     <style>
       table, th, td {
         border: 1px solid black;
@@ -98,7 +108,7 @@
 
         /* Modal Content/Box */
         .popup-content {
-          background-image: linear-gradient(#dd0077, #bb0066);
+          background-image: linear-gradient(#dd0077, #bb0044);
           margin: 15% auto; /* 15% from the top and centered */
           padding: 20px;
           border: 1px solid #888;
@@ -183,6 +193,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a id="add_new_track" class="w3-center" style="position: relative; text-align: center;"><img src='/static/redbtn.png' style="height: 72px"><span style="  position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">Dodaj taśmę</span></img></a>
     </div>
     <div id="edit" style="display:none; overflow-x: auto">
+      <a id="head1" class="w3-button w3-center round_corners">Głowica pojedyncza</a> &nbsp; <a class="w3-button w3-center round_corners" id="head2">Głowica podwójna</a> &nbsp; <a  id="head3" class="w3-button w3-center round_corners">Głowica kasujca</a><br><br>
       <table id="edit_table" style="width:100%; height:100%">
       <tr>
         {% for n in range(32) %}
@@ -198,7 +209,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         {% endfor %}
     </table>
     <br>
-    <a id="back" class="w3-center round_corners w3-red w3-button">Wróć</a>
+    <a id="back" class="w3-center round_corners w3-white w3-button">Wróć</a>
     </div>
   </div>
 </div>
@@ -207,33 +218,32 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="popup-content">
     <span class="close">&times;</span>
     <h6>Wybierz rodzaj taśmy:</h6>
-    <table style="width:100%">
-      <tr>
-        <th>Krótkie (1/4)</th>
-        <th>Średnie (1/2)</th>
-        <th>Długie (1/1)</th>
+    <table style="width:100%; border-style:none">
+      <form>
+      <tr style="border-style:none">
+        <td style="border-style:none" class="visible_td"><img style="width:100%" src=/static/piano.png></img></td>
+        <td style="border-style:none" class="visible_td"><img style="width:100%" src=/static/sax.png></img></td>
+        <td style="border-style:none" class="visible_td"><img style="width:100%" src=/static/guitar.png></img></td>
+        <td style="border-style:none" class="visible_td"><img style="width:100%" src=/static/drums.png></img></td>
       </tr>
-      <tr>
-        <td class="visible_td"><a href="/new_track?type=0&length=8">Pianino</a></td>
-        <td class="visible_td"><a href="/new_track?type=0&length=16">Pianino</a></td>
-        <td class="visible_td"><a href="/new_track?type=0&length=32">Pianino</a></td>
-      </tr>
-      <tr>
-        <td class="visible_td"><a href="/new_track?type=1&length=8">Saksofon</a></td>
-        <td class="visible_td"><a href="/new_track?type=1&length=16">Saksofon</a></td>
-        <td class="visible_td"><a href="/new_track?type=1&length=32">Saksofon</a></td>
-      </tr>
-      <tr>
-        <td class="visible_td"><a href="/new_track?type=2&length=8">Gitara</a></td>
-        <td class="visible_td"><a href="/new_track?type=2&length=16">Gitara</a></td>
-        <td class="visible_td"><a href="/new_track?type=2&length=32">Gitara</a></td>
-      </tr>
-      <tr>
-        <td class="visible_td"><a href="/new_track?type=3&length=8">Bębny</a></td>
-        <td class="visible_td"><a href="/new_track?type=3&length=16">Bębny</a></td>
-        <td class="visible_td"><a href="/new_track?type=3&length=32">Bębny</a></td>
+      <tr style="border-style:none">
+        <td style="border-style:none" class="visible_td"><div class="w3-center"><input type="radio" id="0" name="instrument" value="0"> Pianino</div></td>
+        <td style="border-style:none" class="visible_td"><div class="w3-center"><input type="radio" id="1" name="instrument" value="1"> Saksofon</div></td>
+        <td style="border-style:none" class="visible_td"><div class="w3-center"><input type="radio" id="2" name="instrument" value="2"> Gitara</div></td>
+        <td style="border-style:none" class="visible_td"><div class="w3-center"><input type="radio" id="3" name="instrument" value="3"> Perkusja</div></td>
+      </input>
       </tr>
     </table>
+    <div class="w3-center">
+    <select name="list" id="list" accesskey="target">
+      <option value='none' selected>Wybierz długość taśmy:</option>
+      <option value="32">1/1</option>
+      <option value="16">1/2</option>
+      <option value="8">1/4</option>
+      <input type=button value="Wybierz" onclick="getNewTrack()" />
+    </select>
+  </div>
+    </form>
   </div>
 
 </div>
@@ -241,6 +251,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 <script>
+var head_mode = 0;
 var muted_tracks = [];
 var track_length = 16;
 var max_columns = 32;
@@ -340,6 +351,13 @@ $("#track_edit{{t[0]}}").click(function() {
   current_track = {{t[0]}};
   $("#bubble").css({'display': 'none'});
   $("#edit").css({'display': 'block'});
+  $("#head1").css({"background-color":"rgb(0,0,255)"});
+  $("#head2").css({"background-color":"rgb(255,255,255)"});
+  $("#head3").css({"background-color":"rgb(255,255,255)"});
+  $("#head1").css({"color":"#ffffff"});
+  $("#head2").css({"color":"#000000"});
+  $("#head3").css({"color":"#000000"});
+  head_mode = 0;
   if(current_track>0){
     track_length = track_timings[current_track-1];
   }
@@ -369,6 +387,7 @@ $("#back").click(function() {
     }
 });
 $("td").click(function() {
+  if(head_mode==0){
     var item = $(this).closest("td").text().split("/");
     $("#td"+item[1]+"_"+item[0]).css({"background-color": "red"});
     pattern[current_track-1].push([item[1], item[0]]);
@@ -384,6 +403,39 @@ $("td").click(function() {
     data: JSON.stringify(postData),
     success: function(data){console.log('success')}
 });
+} else if(head_mode==1){
+  var item = $(this).closest("td").text().split("/");
+  $("#td"+item[1]+"_"+item[0]).css({"background-color": "orange"});
+  pattern[current_track-1].push([item[1], item[0]]);
+  var postData = {
+    track: current_track,
+    append0: item[1],
+    append1: item[0]
+  }
+  $.ajax({
+  url: "/sync",
+  type: "POST",
+  contentType: "application/json",
+  data: JSON.stringify(postData),
+  success: function(data){console.log('success')}
+});
+} else{
+  var item = $(this).closest("td").text().split("/");
+  $("#td"+item[1]+"_"+item[0]).css({"background-color": "rgba(0,0,0,0)"});
+    pattern[current_track-1].splice(pattern[current_track-1].indexOf([item[1], item[0]]),0);
+  var postData = {
+    track: current_track,
+    remove0: item[1],
+    remove1: item[0]
+  }
+  $.ajax({
+  url: "/sync_2",
+  type: "POST",
+  contentType: "application/json",
+  data: JSON.stringify(postData),
+  success: function(data){console.log('success')}
+});
+}
 });
 $("#add_new_track").click(function() {
   popup.style.display = "block";
@@ -477,6 +529,33 @@ $("#mute8").click(function() {
 
 var size_updater = setInterval(size_update, 1000);
 
+$("#head2").click(function() {
+  $("#head2").css({"background-color":"rgb(0,0,255)"});
+  $("#head1").css({"background-color":"rgb(255,255,255)"});
+  $("#head3").css({"background-color":"rgb(255,255,255)"});
+  $("#head2").css({"color":"#ffffff"});
+  $("#head1").css({"color":"#000000"});
+  $("#head3").css({"color":"#000000"});
+    head_mode = 1;
+});
+$("#head1").click(function() {
+  $("#head1").css({"background-color":"rgb(0,0,255)"});
+  $("#head2").css({"background-color":"rgb(255,255,255)"});
+  $("#head3").css({"background-color":"rgb(255,255,255)"});
+  $("#head1").css({"color":"#ffffff"});
+  $("#head2").css({"color":"#000000"});
+  $("#head3").css({"color":"#000000"});
+    head_mode = 0;
+});
+$("#head3").click(function() {
+  $("#head3").css({"background-color":"rgb(0,0,255)"});
+  $("#head1").css({"background-color":"rgb(255,255,255)"});
+  $("#head2").css({"background-color":"rgb(255,255,255)"});
+  $("#head3").css({"color":"#ffffff"});
+  $("#head2").css({"color":"#000000"});
+  $("#head1").css({"color":"#000000"});
+    head_mode = 2;
+});
 
 </script>
 
