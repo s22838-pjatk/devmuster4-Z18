@@ -118,17 +118,16 @@ def get_note():
         mid = MidiFile()
         track = MidiTrack()
         mid.tracks.append(track)
-        # track.append(Message('control_change', control=32, value=127, time=0))
-        # track.append(Message('program_change', program=25, time=0))
+        track.append(Message('control_change', control=32, value=127, time=0))
+        track.append(Message('program_change', program=25, time=0))
         track.append(Message('note_on', note=48+i, velocity=90, time=0))
         track.append(Message('note_off', note=48+i, velocity=90, time=length))
         track.append(Message('note_off', note=48+i, velocity=90, time=2*length))
 
         mid.save('temp.mid')
 
-        # using the default sound font in 44100 Hz sample rate
         fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
-        fs.midi_to_audio('temp.mid', "static/audio/piano/"+str(i)+"_"+str(length)+'.wav')
+        fs.midi_to_audio('temp.mid', "static/audio/guitar/"+str(i)+"_"+str(length)+'.wav')
 
     return redirect('/')
 
