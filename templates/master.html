@@ -60,6 +60,18 @@
             transform: rotate(360deg);
           }
         }
+        @-webkit-keyframes moving /* Safari and Chrome */ {
+          0% {
+            -webkit-transform: translate(0px,-10px);
+            -o-transform: translate(0px,-10px);
+            transform: translate(0px,-10px);
+          }
+          100% {
+            -webkit-transform: translate(0px,10px);
+            -o-transform: translate(0px,10px);
+            transform: translate(0px,10px);
+          }
+        }
         .rotating {
           -webkit-animation: rotating 2s linear infinite;
           -moz-animation: rotating 2s linear infinite;
@@ -141,7 +153,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-center">
           <a href="/del_track?no={{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/trashcan.png>&nbsp;&nbsp;</img></a>
           <div id="track_edit{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/editicon.png></img>&nbsp;&nbsp;</div>
-          <div class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/muteicon.png>&nbsp;&nbsp;</img></div>
+          <div id="mute{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/muteicon.png>&nbsp;&nbsp;</img></div>
         </div>
         <div class-"w3-right" style="display: inline-block"><img class="rotating" src="/static/roll-256.png" style="position: absolute; width:110px; right:-55px; top:-5px" alt="Tape"></div>
       </div>
@@ -150,16 +162,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <br>
     <a id="add_new_track" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
     </div>
-    <div id="edit" style="display:none">
-      <table style="width:100%; height:100%">
+    <div id="edit" style="display:none; overflow-x: auto">
+      <table id="edit_table" style="width:100%; height:100%">
       <tr>
-        {% for n in range(16) %}
+        {% for n in range(32) %}
         <th id="th{{n}}">{{n}}</th>
         {% endfor %}
       </tr>
         {% for m in range(12) %}
       <tr id="tr{{n}}">
-        {% for n in range(16) %}
+        {% for n in range(32) %}
         <td id="td{{n}}_{{m}}">{{m}}/{{n}}</td>
         {% endfor %}
       </tr>
@@ -182,19 +194,24 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <th>Długie (1/1)</th>
       </tr>
       <tr>
-        <td class="visible_td">Pianino</td>
-        <td class="visible_td">Pianino</td>
-        <td class="visible_td">Pianino</td>
+        <td class="visible_td"><a href="/new_track?type=0&length=8">Pianino</a></td>
+        <td class="visible_td"><a href="/new_track?type=0&length=16">Pianino</a></td>
+        <td class="visible_td"><a href="/new_track?type=0&length=32">Pianino</a></td>
       </tr>
       <tr>
-        <td class="visible_td">Saksofon</td>
-        <td class="visible_td">Saksofon</td>
-        <td class="visible_td">Saksofon</td>
+        <td class="visible_td"><a href="/new_track?type=1&length=8">Saksofon</a></td>
+        <td class="visible_td"><a href="/new_track?type=1&length=16">Saksofon</a></td>
+        <td class="visible_td"><a href="/new_track?type=1&length=32">Saksofon</a></td>
       </tr>
       <tr>
-        <td class="visible_td">Bębny</td>
-        <td class="visible_td">Bębny</td>
-        <td class="visible_td">Bębny</td>
+        <td class="visible_td"><a href="/new_track?type=2&length=8">Gitara</a></td>
+        <td class="visible_td"><a href="/new_track?type=2&length=16">Gitara</a></td>
+        <td class="visible_td"><a href="/new_track?type=2&length=32">Gitara</a></td>
+      </tr>
+      <tr>
+        <td class="visible_td"><a href="/new_track?type=3&length=8">Bębny</a></td>
+        <td class="visible_td"><a href="/new_track?type=3&length=16">Bębny</a></td>
+        <td class="visible_td"><a href="/new_track?type=3&length=32">Bębny</a></td>
       </tr>
     </table>
   </div>
@@ -204,12 +221,15 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 <script>
+var muted_tracks = [];
+var track_length = 16;
+var max_columns = 32;
 var popup = document.getElementsByClassName("popup")[0];
 var span = document.getElementsByClassName("close")[0];
 var current_track = 0;
 var track_instruments = [{% for t in tracks %}{{t[2]}}, {% endfor %}];
+var track_timings = [{% for t in tracks %}{{t[4]}}, {% endfor %}];
 var pattern = [{% for t in tracks %}{{t[3]}}, {% endfor %}];
-var track_length = 16;
 var samples_number = 12;
 var stop = false;
 var row = 0;
@@ -221,7 +241,7 @@ var row2_common = 0;
 var row3 = 0;
 var row3_common = 0;
 var octave = [1,3,6,8,10];
-var instruments = ['piano', 'sax', 'guitar']
+var instruments = ['piano', 'sax', 'guitar', 'drums']
 function player() {
   if(stop != 1){
   for(i=0;i<samples_number;i++){
@@ -242,13 +262,13 @@ function player() {
   if(row==track_length){
     row=0;
   }
-  if(row1==track_length/2){
+  if(row1==8){
     row1=0;
   }
-  if(row2==track_length){
+  if(row2==16){
     row2=0;
   }
-  if(row3==track_length*2){
+  if(row3==32){
     row3=0;
   }
 }
@@ -257,9 +277,11 @@ function player_common() {
     if(current_track==0){
       for (i=0;i<pattern.length;i++){
         for(j=0;j<pattern[i].length;j++){
-          if(row_common == pattern[i][j][0]){
-            var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+'.wav');
-            audio.play();
+          if(row1_common == pattern[i][j][0] && track_timings[i] ==8 || row2_common == pattern[i][j][0] && track_timings[i] ==16 || row3_common == pattern[i][j][0] && track_timings[i] ==32){
+            if(!muted_tracks.includes(i)){
+              var audio = new Audio('/static/audio/'+instruments[track_instruments[i]]+'/'+(samples_number-pattern[i][j][1]-1)+'.wav');
+              audio.play();
+            }
           }
         }
       }
@@ -272,19 +294,25 @@ function player_common() {
   if(row_common==track_length){
     row_common=0;
   }
-  if(row1_common==track_length/2){
+  if(row1_common==8){
     row1_common=0;
   }
-  if(row2_common==track_length){
+  if(row2_common==16){
     row2_common=0;
   }
-  if(row3_common==track_length*2){
+  if(row3_common==32){
     row3_common=0;
   }
 }
 var player_start = setInterval(player, 250);
 var player_common_start = setInterval(player_common, 250);
 $(document).ready(function() {
+  if(current_track>0){
+    track_length = track_timings[current_track-1];
+  }
+  else{
+    track_length = 16;
+  }
   $("#main").animate({opacity: 1});
 });
 {% for t in tracks %}
@@ -292,8 +320,23 @@ $("#track_edit{{t[0]}}").click(function() {
   current_track = {{t[0]}};
   $("#bubble").css({'display': 'none'});
   $("#edit").css({'display': 'block'});
+  if(current_track>0){
+    track_length = track_timings[current_track-1];
+  }
+  else{
+    track_length = 16;
+  }
   for(i=0;i<pattern[current_track-1].length; i++){
     $("#td"+pattern[current_track-1][i][0]+"_"+pattern[current_track-1][i][1]).css({"background-color": "red"});
+  }
+  for(i=0;i<max_columns;i++){
+    if(i>=track_length){
+      $( "#th"+i ).css({"display":"none"})
+      $( "#tr"+i ).css({"display":"none"})
+      for(j=0;j<samples_number;j++){
+        $( "#td"+i+"_"+j ).css({"display":"none"})
+      }
+    }
   }
 });
 $("#playstop").unbind().click(function() {
@@ -343,6 +386,64 @@ window.onclick = function(event) {
     popup.style.display = "none";
   }
 }
+
+$("#mute1").click(function() {
+  if(!muted_tracks.includes(0)){
+    muted_tracks.push(0);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(0),1);
+  }
+});
+$("#mute2").click(function() {
+  if(!muted_tracks.includes(1)){
+    muted_tracks.push(1);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(1),1);
+  }
+});
+$("#mute3").click(function() {
+  if(!muted_tracks.includes(2)){
+    muted_tracks.push(2);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(2),1);
+  }
+});
+$("#mute4").click(function() {
+  if(!muted_tracks.includes(3)){
+    muted_tracks.push(3);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(3),1);
+  }
+});
+$("#mute5").click(function() {
+  if(!muted_tracks.includes(4)){
+    muted_tracks.push(4);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(4),1);
+  }
+});
+$("#mute6").click(function() {
+  if(!muted_tracks.includes(5)){
+    muted_tracks.push(5);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(5),1);
+  }
+});
+$("#mute7").click(function() {
+  if(!muted_tracks.includes(6)){
+    muted_tracks.push(6);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(6),1);
+  }
+});
+$("#mute8").click(function() {
+  if(!muted_tracks.includes(7)){
+    muted_tracks.push(7);
+  } else{
+    muted_tracks.splice(muted_tracks.indexOf(7),1);
+  }
+});
+
 
 </script>
 

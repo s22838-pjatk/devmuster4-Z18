@@ -39,16 +39,18 @@ def new_track():
     if session.get('guide_passed') and session.get('logged_in'):
         if len(session.get('tracks'))<4:
             type = request.args.get('type')
+            length = request.args.get('length')
             session_tracks = session.get('tracks')
             track_nrs = []
             for i in session_tracks:
                 track_nrs.append(i[0])
-            if track_nrs != []:
-                val = max(track_nrs)+1
-            else:
-                val = 1
-            session_tracks.append([val, 'Taśma '+str(val),int(type),[]])
-            session['tracks'] = session_tracks
+            print(session_tracks)
+            for i in range(1,5):
+                if i not in track_nrs:
+                    session_tracks.append([i, 'Taśma '+str(i),int(type),[], int(length)])
+                    print(session_tracks)
+                    session['tracks'] = session_tracks
+                    break
             return redirect("/master_tape")
         else:
             return render_template('master.html', username=session.get('name'), tracks=session.get('tracks'), err=1)
