@@ -145,7 +145,7 @@ function player() {
   for(i=0;i<8;i++){
     console.log($('#td' + row.toString()+"_"+i.toString()).css("background-color"));
     if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
-        var audio = new Audio('/static/'+row+'.wav');
+        var audio = new Audio('/static/audio/'+row+'.wav');
         audio.play();
       };
     };
