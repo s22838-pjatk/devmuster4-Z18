@@ -46,13 +46,23 @@ def new_track():
                 val = max(track_nrs)+1
             else:
                 val = 1
-            session_tracks.append([val, 'Taśma '+str(val),0,[[0,0], [1,2], [5,2]]])
+            session_tracks.append([val, 'Taśma '+str(val),0,[]])
             session['tracks'] = session_tracks
             return redirect("/master_tape")
         else:
             return render_template('master.html', username=session.get('name'), tracks=session.get('tracks'), err=1)
     else:
         return redirect('/')
+
+
+@app.route("/sync", methods=['POST'])
+def sync():
+    result = []
+    data = request.get_json()
+    session_tracks = session.get('tracks')
+    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1'])])
+    session['tracks'] = session_tracks
+    return redirect("/master_tape")
 
 
 @app.route("/del_track")

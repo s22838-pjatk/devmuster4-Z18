@@ -25,7 +25,7 @@
         }
         .speech-bubble {
         	position: relative;
-          background: rgba(0,0,0,0.5);
+          /* background: rgba(0,0,0,0.5); */
         	border-radius: .4em;
         }
 
@@ -136,20 +136,23 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <script>
 var current_track = 0;
 var pattern = [{% for t in tracks %}{{t[3]}}, {% endfor %}];
-track_length = 16;
-console.log(pattern);
+var track_length = 16;
+var samples_number = 8;
 var stop = false;
 var row = 0;
 function player() {
   if(stop != 1){
   for(i=0;i<8;i++){
-    console.log($('#td' + row.toString()+"_"+i.toString()).css("background-color"));
+    for(j=0;j<8;j++){
+        $('#th' + j).css({"background-color":"rgba(0, 0, 0, 0)"});
+    }
+    $('#th' + row.toString()).css({"background-color":"rgb(0, 0, 255)"});
     if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
-        var audio = new Audio('/static/audio/'+row+'.wav');
+        var audio = new Audio('/static/audio/sax/'+(samples_number-i-1)+'.wav');
         audio.play();
       };
     };
-  }''
+  }
   row+= 1;
   if(row==8){
     row=0;
@@ -170,7 +173,6 @@ $("#track_edit{{t[0]}}").click(function() {
 });
 $("#playstop").unbind().click(function() {
   stop = !stop;
-  console.log(stop);
 });
 
 {% endfor %}
@@ -180,7 +182,21 @@ $("#go_back").click(function() {
   $("#edit").css({'display': 'none'});
 });
 $("td").click(function() {
-    var item = $(this).closest("td").text();
+    var item = $(this).closest("td").text().split("/");
+    $("#td"+item[1]+"_"+item[0]).css({"background-color": "red"});
+    pattern[current_track-1].push([item[1], item[0]]);
+    var postData = {
+      track: current_track,
+      append0: item[1],
+      append1: item[0]
+    }
+    $.ajax({
+    url: "/sync",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(postData),
+    success: function(data){console.log('success')}
+});
 });
 </script>
 
