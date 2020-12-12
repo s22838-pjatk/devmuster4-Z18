@@ -64,6 +64,9 @@
           -o-animation: rotating 2s linear infinite;
           animation: rotating 2s linear infinite;
         }
+        #playstop {
+          cursor: pointer;
+        }
         </style>
 
 
@@ -93,9 +96,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class-"w3-left"><img class="rotating" src="/static/roll-256.png" style="position: absolute; width:110px; left:-55px; top:-5px" alt="Tape"></div>
         <div class="w3-center" style="padding-left:56px"><a style="display:inline-block; font-size: 20px">{{t[1]}}</a></div>
         <div class="w3-center">
-          <a href="/del_track?no={{t[0]}}" class="w3-right round_corners w3-white w3-button" style="display: inline-block; margin-left:5px;">❌</a>
-          <div id="track_edit{{t[0]}}" class="w3-right round_corners w3-white w3-button" style="display: inline-block; margin-left:5px;">✏️</div>
-          <div class="w3-right round_corners w3-white w3-button" style="display: inline-block; margin-left:5px;"><img src=/static/muteicon.png></img></div>
+          <a href="/del_track?no={{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/trashcan.png>&nbsp;&nbsp;</img></a>
+          <div id="track_edit{{t[0]}}" class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/editicon.png></img>&nbsp;&nbsp;</div>
+          <div class="w3-right" style="display: inline-block; margin-left:5px;"><img style="height:36px" src=/static/muteicon.png>&nbsp;&nbsp;</img></div>
         </div>
         <div class-"w3-right" style="display: inline-block"><img class="rotating" src="/static/roll-256.png" style="position: absolute; width:110px; right:-55px; top:-5px" alt="Tape"></div>
       </div>
@@ -133,19 +136,15 @@ var pattern = [];
 var stop = false;
 var row = 0;
 function player() {
-  to_stop = false;
+  if(stop != 1){
   for(i=0;i<8;i++){
     console.log($('#td' + row.toString()+"_"+i.toString()).css("background-color"));
     if($('#td' + row.toString()+"_"+i.toString()).css("background-color")=="rgb(255, 0, 0)"){
-      if(stop == 1){
-        to_stop=true;
-      }
-      if(to_stop!=true){
         var audio = new Audio('/static/test.wav');
         audio.play();
-      }
+      };
     };
-  }
+  }''
   row+= 1;
   if(row==8){
     row=0;
@@ -164,11 +163,6 @@ $("#track_edit{{t[0]}}").click(function() {
 });
 $("#playstop").unbind().click(function() {
   stop = !stop;
-  if(stop==true){
-    clearInterval(player_start);
-  } else{
-    setInterval(player, 100);
-  }
   console.log(stop);
 });
 
