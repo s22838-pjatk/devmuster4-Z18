@@ -147,6 +147,16 @@ def login():
         session['name'] = request.form['name']
         return redirect('/')
 
+@app.route("/end_game")
+def end():
+    if session.get('logged_in'):
+        session['logged_in'] = False
+        session['guide_passed'] = False
+        session['tracks'] = []
+        return redirect('/')
+    else:
+        return redirect('/')
+
 
 @app.route('/<path:path>')
 def send_static(path):

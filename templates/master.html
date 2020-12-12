@@ -109,7 +109,7 @@
         /* Modal Content/Box */
         .popup-content {
           background-image: linear-gradient(#dd0077, #bb0044);
-          margin: 15% auto; /* 15% from the top and centered */
+          margin: 10% auto; /* 15% from the top and centered */
           padding: 20px;
           border: 1px solid #888;
           width: 80%; /* Could be more or less, depending on screen size */
@@ -250,7 +250,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <div id="guide" class="popup">
 
-  <div class="popup-content" style="height:40%">
+  <div class="popup-content" style="height:50%">
     <span class="close">&times;</span>
     <h1>Witaj ponownie!</h1>
     <div class="w3-container w3-twothird">
@@ -258,7 +258,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <div id="quest" class="w3-button">Przypomnij mi zadanie</div><br>
       <div class="w3-button">Nie daję rady, pomóż mi</div><br>
       <a href="/guide" class="w3-button">Wróćmy na chwilę do samouczka</a><br>
-    </div>
+      <a id="end_game" class="w3-button">Chciałbym zakończyć grę</a><br>
+      <a id="confirm" href="/end_game" class="w3-button" style="display:none">Potwierdź</a><br>
+    </div><br><br>
     <div class="w3-container w3-third"><p id="character-help" class="w3-center"><img src="/static/charactermini-512.png" style="padding:16px; width:100%" alt="Character"></p></div>
   </div>
 
@@ -653,6 +655,9 @@ $("#head3").click(function() {
 $("#quest_player").click(function() {
   var audio = new Audio('/static/audio/first_quest.wav');
   audio.play();
+});
+$("#end_game").click(function() {
+  $("#confirm").css({"display":"block"});
 });
 </script>
 

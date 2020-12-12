@@ -77,7 +77,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-center w3-quarter">
     <h1><b>Pan DJ</b></h1><br><br>
-    <p id="character" class="w3-center"><img id="img" src="/static/characterv2-512.png" style="padding:16px; width:100%" alt="Character"></p>
+    <p id="character" class="w3-center"><img id="img" src="/static/characterv2-512.png" style="cursor: pointer; padding:16px; width:100%" alt="Character"></p>
   </div>
 <div class="w3-center w3-threequarter">
   <div class="w3-container w3-center w3-padding-16 speech-bubble" style="width:90%; color:white; padding-left: 32px; padding-right:32px; max-height:90vh; margin-top:5%">
@@ -96,18 +96,23 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         Zaczniemy od wprowadzenia Cię do podstawowej nawigacji po programie.<br><br>
 
   Jeśli zapomnisz - nie przejmuj się, możesz wrócić do tego potem!</p>
+      <div class="w3-button w3-black" id="goto1"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="goto3"><h4>Dalej</h4></div>
     </div>
     <div id="3step" style="display:none">
       <h1>Tak wyglada tryb Tworzenia.. </h1>
       <p style="font-size: 3.5vh">
         W tej sekcji znajdziesz utwór, nad którym aktualnie pracujesz. <br>
-Każdy utwór jest wynikiem wykonywania zadanych zadań -  na początku Twoim zadaniem będzie odwzorowanie melodii. Na późniejszych etapach stworzysz własne kompozycje. Pamiętaj - nie ma drogi na skróty!
+Każdy utwór jest wynikiem wykonywania zadanych zadań -  na początku Twoim zadaniem będzie odwzorowanie melodii. Na późniejszych etapach stworzysz własne kompozycje. Pamiętaj - nie ma drogi na skróty!</p>
+<img style="width: 75%" src="tworzenie.png"></img>
+      <div class="w3-button w3-black" id="goto2_"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="goto4"><h4>Dalej</h4></div>
     </div>
     <div id="4step" style="display:none">
       <p style="font-size: 3.5vh">
         W sekcji tworzenia znajdują się taśmy. Twoim zadaniem jest nagranie na nie odpowiednich dźwięków, a następnie odtworzenie ich jednocześnie. <br>Proste, co nie?</p>
+        <img style="width: 75%" src="tasmy.png"></img>
+      <div class="w3-button w3-black" id="goto3_"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="goto5"><h4>Dalej</h4></div>
     </div>
     <div id="5step" style="display:none">
@@ -116,16 +121,22 @@ Każdy utwór jest wynikiem wykonywania zadanych zadań -  na początku Twoim za
         Pojedyncza - umożliwia zapis pojedynczych dźwięków<br>
         Podwójna - umożliwia zapis dłuższych dźwięków<br>
         Kasująca - umożliwia wymazanie dźwięków z taśmy<br>
+      <img style="width: 60%" src="zapis.png"></img>
+      <div class="w3-button w3-black" id="goto4_"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="goto6"><h4>Dalej</h4></div>
     </div>
     <div id="6step" style="display:none">
       <p style="font-size: 3.5vh">
         Każda taśma ma skończoną długość, ale gra w pętli. Oznacza to, że jej koniec jest jednocześnie początkiem, a zatrzyma się dopiero gdy klikniesz STOP lub ją wyciszysz. Taśmy mogą mieć różne długości, wybierz odpowiednią z szuflady i umieść w magnetofonie.
+      </p>
+      <img style="width: 75%" src="szuflada.png"></img>
+      <div class="w3-button w3-black" id="goto5_"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="goto7"><h4>Dalej</h4></div>
     </div>
     <div id="7step" style="display:none">
       <p style="font-size: 3.5vh">
-      To jak - zaczynamy?
+      To jak - zaczynamy?</p>
+      <div class="w3-button w3-black" id="goto6_"><h4>Wstecz</h4></div>
       <div class="w3-button w3-black" id="done"><h4>Zaczynamy!</h4></div>
     </div>
   </div>
@@ -137,29 +148,70 @@ Każdy utwór jest wynikiem wykonywania zadanych zadań -  na początku Twoim za
 $(document).ready(function() {
   $("#main").animate({opacity: 1});
 });
+$("#goto1").click(function() {
+  $("#1step").css({"display": "block"});
+  $("#2step").css({"display": "none"});
+  $("#3step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv3-512.png");
+});
 $("#goto2").click(function() {
   $("#1step").css({"display": "none"});
   $("#2step").css({"display": "block"});
+  $("#3step").css({"display": "none"});
   $("#img").attr("src","/static/characterv3-512.png");
 });
 $("#goto3").click(function() {
   $("#2step").css({"display": "none"});
   $("#3step").css({"display": "block"});
+  $("#4step").css({"display": "none"});
   $("#img").attr("src","/static/characterv4-512.png");
 });
 $("#goto4").click(function() {
   $("#3step").css({"display": "none"});
   $("#4step").css({"display": "block"});
+  $("#5step").css({"display": "none"});
   $("#img").attr("src","/static/characterv5-512.png");
 });
 $("#goto5").click(function() {
   $("#4step").css({"display": "none"});
   $("#5step").css({"display": "block"});
+  $("#6step").css({"display": "none"});
   $("#img").attr("src","/static/characterv3-512.png");
+});
+$("#goto2_").click(function() {
+  $("#1step").css({"display": "none"});
+  $("#2step").css({"display": "block"});
+  $("#3step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv3-512.png");
+});
+$("#goto3_").click(function() {
+  $("#2step").css({"display": "none"});
+  $("#3step").css({"display": "block"});
+  $("#4step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv4-512.png");
+});
+$("#goto4_").click(function() {
+  $("#3step").css({"display": "none"});
+  $("#4step").css({"display": "block"});
+  $("#5step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv5-512.png");
+});
+$("#goto5_").click(function() {
+  $("#4step").css({"display": "none"});
+  $("#5step").css({"display": "block"});
+  $("#6step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv3-512.png");
+});
+$("#goto6_").click(function() {
+  $("#5step").css({"display": "none"});
+  $("#6step").css({"display": "block"});
+  $("#7step").css({"display": "none"});
+  $("#img").attr("src","/static/characterv4-512.png");
 });
 $("#goto6").click(function() {
   $("#5step").css({"display": "none"});
   $("#6step").css({"display": "block"});
+  $("#7step").css({"display": "none"});
   $("#img").attr("src","/static/characterv4-512.png");
 });
 $("#goto7").click(function() {
