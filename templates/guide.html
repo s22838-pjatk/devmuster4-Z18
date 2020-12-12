@@ -77,7 +77,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-center w3-quarter">
     <h1><b>Pan DJ</b></h1><br><br>
-    <p id="character" class="w3-center"><img src="/static/characterv2-512.png" style="padding:16px; width:100%" alt="Character"></p>
+    <p id="character" class="w3-center"><img id="img" src="/static/characterv2-512.png" style="padding:16px; width:100%" alt="Character"></p>
   </div>
 <div class="w3-center w3-threequarter">
   <div class="w3-container w3-center w3-padding-16 speech-bubble" style="width:90%; color:white; padding-left: 32px; padding-right:32px; max-height:90vh; margin-top:5%">
@@ -126,14 +126,17 @@ $(document).ready(function() {
 $("#goto2").click(function() {
   $("#1step").css({"display": "none"});
   $("#2step").css({"display": "block"});
+  $("#img").attr("src","/static/characterv3-512.png");
 });
 $("#goto3").click(function() {
   $("#2step").css({"display": "none"});
   $("#3step").css({"display": "block"});
+  $("#img").attr("src","/static/characterv4-512.png");
 });
 $("#goto4").click(function() {
   $("#3step").css({"display": "none"});
   $("#4step").css({"display": "block"});
+  $("#img").attr("src","/static/characterv5-512.png");
 });
 $("#goto5").click(function() {
   window.location.replace('/guide_done');

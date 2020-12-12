@@ -39,7 +39,14 @@ def new_track():
     if session.get('guide_passed') and session.get('logged_in'):
         if len(session.get('tracks'))<4:
             session_tracks = session.get('tracks')
-            session_tracks.append([len(session['tracks'])+1, 'Taśma '+str(len(session.get('tracks'))+1),[]])
+            track_nrs = []
+            for i in session_tracks:
+                track_nrs.append(i[0])
+            if track_nrs != []:
+                val = max(track_nrs)+1
+            else:
+                val = 1
+            session_tracks.append([val, 'Taśma '+str(val),0,[]])
             session['tracks'] = session_tracks
             return redirect("/master_tape")
         else:
@@ -66,7 +73,7 @@ def del_track():
 def guide_done():
     if not session.get('guide_passed') and session.get('logged_in'):
         session['guide_passed'] = True
-        session['tracks'] = [[1, 'Taśma 1', []]]
+        session['tracks'] = [[1, 'Taśma 1',0, []]]
         return redirect('/master_tape')
     else:
         return redirect('/')
