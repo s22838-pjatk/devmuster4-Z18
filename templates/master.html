@@ -101,9 +101,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       </div>
     </div><br><br>
     {% endfor %}
-  </div>
     <br>
     <a href="/new_track" class="w3-center round_corners w3-white w3-button">Nowa taśma</a>
+    </div>
+    <div id="edit" style="display:none">
+    <br>
+    <a id="go_back" class="w3-center round_corners w3-white w3-button">Wróć</a>
+    </div>
   </div>
 </div>
 
@@ -116,6 +120,7 @@ $(document).ready(function() {
 {% for t in tracks %}
 $("#track_edit{{t[0]}}").click(function() {
   $("#bubble").css({'display': 'none'});
+  $("#edit").css({'display': 'block'});
 });
 {% endfor %}
 </script>
