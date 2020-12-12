@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js">
     <lin rel="stylesheet" href="/static/index.css" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js"></script>
     <style>
         body, html {
           height: 100%;
@@ -34,11 +35,11 @@
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
-<body class="w3-light-grey">
+<body class="w3-white">
 
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main">
+<div class="w3-main" id="main" style="opacity:0">
 
   <!-- Header -->
   <header class="w3-container w3-center" style="padding-top:22px">
@@ -55,6 +56,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <!-- End page content -->
 </div>
+<div class="w3-main" id="welcome" style="opacity:0">
 
+      <h5 class="w3-center">Wpisz swój nick:</h5>
+
+
+  <!-- End page content -->
+</div>
+<script>
+$(document).ready(function() {
+    $("#welcome").animate({opacity: 1}, 1000);
+});
+</script>
 
 </html>
