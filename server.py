@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, redirect, request, send_from_directory, jsonify, session
 import glob
 import time
-import threading
+import json
 from pydub import AudioSegment
 from midi2audio import FluidSynth
 from mido import Message, MidiFile, MidiTrack
@@ -22,6 +22,14 @@ def index():
         return render_template('loading.html')
     else:
         return redirect('/master_tape')
+
+
+@app.route("/master_tape")
+def master_tape():
+    if not session.get('guide_passed'):
+        return render_template('guide.html', username=session.get('username'))
+    else:
+        return render_template('master.html', username=session.get('username'))
 
 
 @app.route("/get_note")

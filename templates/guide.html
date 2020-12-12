@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Witaj! Jestem Pan DJ!</title>
+    <title>Wprowadzanie</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/w3.css">
@@ -46,7 +46,7 @@
         50% { transform: rotate(-10deg); }
         100% { transform: rotate(0deg); }
       }
-      #character {
+      .rotation_anim {
         -webkit-animation: rotate 2s infinite; /* Safari 4+ */
         -moz-animation:    rotate 2s infinite; /* Fx 5+ */
         -o-animation:      rotate 2s infinite; /* Opera 12+ */
@@ -77,18 +77,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 
 </div>
-<div class="w3-main" id="welcome" style="opacity:0; position: absolute; top:20%;left:0; width:100%;height:60%;">
-      <p id="character" class="w3-center"><img src="/static/character.png" style="height:300px" alt="Character"></p><br><br>
-      <h5 class="w3-center">Witaj w Pan DJ!</h5>
-
-
-</div>
 <script>
 $(document).ready(function() {
-    $("#welcome").animate({opacity: 1}, 1000).delay(2000).animate({opacity: 0}, 1000, function() {
-      $("#welcome").css({'display': 'none'});
-      $("#main").animate({opacity: 1});
-    });
+  $("#main").animate({opacity: 1});
 });
 </script>
 
