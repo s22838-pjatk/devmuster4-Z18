@@ -14,17 +14,28 @@
         body, html {
           height: 100%;
           margin: 0;
+          color:white;
         }
-/*
-        .bg {
-          background-image: url("../static/1.png");
+        .speech-bubble {
+        	position: relative;
+        	background: rgba(0,0,0,0.5);
+        	border-radius: .4em;
+        }
 
-          height: 100%;
-
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: cover;
-        } */
+        .speech-bubble:after {
+        	content: '';
+        	position: absolute;
+        	left: 0;
+        	top: 50%;
+        	width: 0;
+        	height: 0;
+        	border: 40px solid transparent;
+        	border-right-color: rgba(0,0,0,0.5);
+        	border-left: 0;
+        	border-top: 0;
+        	margin-top: -20px;
+        	margin-left: -40px;
+        }
         .round_corners{
           border-radius: 50px;
         }
@@ -59,27 +70,70 @@
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
-<body class="w3-white">
+<body style="background-image: linear-gradient(#AA0099, #990000);">
 
 
-<div class="w3-main" id="main" style="opacity:0; position: absolute; top:0;left:0; width:100%;height:100%;">
+<div class="w3-main" id="main" style="opacity:0; position: absolute; top:0;left:0; width:100%;height:100%;overflow:auto">
 
-  <header class="w3-container w3-center" style="padding-top:15%">
-    <h1><b>Pan DJ</b></h1>
-  </header>
+  <div class="w3-center w3-quarter">
+    <h1><b>Pan DJ</b></h1><br><br>
+    <p id="character" class="w3-center"><img src="/static/characterv2.png" style="padding:16px; width:100%" alt="Character"></p>
+  </div>
+<div class="w3-center w3-threequarter">
+  <div class="w3-content w3-padding-16 speech-bubble" style="color:white; padding-left: 32px; padding-right:32px; max-height:85vh; margin-top:5%">
+    <div id="1step">
+      <h1>Witaj w programie <br><b>Pan DJ!</b></h1>
+      <p style="font-size: 3.5vh">
+      To ja, Twój osobisty asystent w muzycznej karierze.
+      Zjawię się na Twoje życzenie gdy będziesz mieć z czymś problem.
+      Zadbam o Twoją dobrą zabawę, gdy będziesz poznawać sztukę samplowania.<br><br>
 
-    <form action="/login" style="text-align:center" method="POST">
-      <br>
-      <p class="w3-center">Wpisz swój nick:</p>
-      <input class="w3-border w3-padding round_corners" type="text" name="name" maxlength=16 placeholder="Nazwa" required>
-      <input class="w3-button w3-theme round_corners" type="submit" value=">"><br><br>
-    </form>
+      Jestem mistrzem nr 2137.</p>
+      <div class="w3-button w3-black" id="goto2"><h4>Dalej</h4></div>
+    </div>
+    <div id="2step" style="display:none">
+      <p style="font-size: 3.5vh">
+        Zaczniemy od wprowadzenia Cię do podstawowej nawigacji po programie.<br><br>
+
+  Jeśli zapomnisz - nie przejmuj się, możesz wrócić do tego potem!</p>
+      <div class="w3-button w3-black" id="goto3"><h4>Dalej</h4></div>
+    </div>
+    <div id="3step" style="display:none">
+      <h1>To jest Twoja ścieżka Master. </h1>
+      <p style="font-size: 3.5vh">
+        Znajdują się tutaj wszystkie Twoje utwory wykonane w trakcie gry. <br>
+
+Nie możesz zmieniać przeszłości, każdy utwór tutaj jest już wydany i puszczany w tutejszym Radio. Nie przejmuj się odbiorem - skup się na tworzeniu…</p>
+      <div class="w3-button w3-black" id="goto4"><h4>Dalej</h4></div>
+    </div>
+    <div id="4step" style="display:none">
+      <h1>To jest Twoja ścieżka Master. </h1>
+      <p style="font-size: 3.5vh">
+        Znajdują się tutaj wszystkie Twoje utwory wykonane w trakcie gry. <br>
+
+Nie możesz zmieniać przeszłości, każdy utwór tutaj jest już wydany i puszczany w tutejszym Radio. Nie przejmuj się odbiorem - skup się na tworzeniu…</p>
+      <div class="w3-button w3-black" id="goto5"><h4>Dalej</h4></div>
+    </div>
+  </div>
+</div>
 
 
 </div>
 <script>
 $(document).ready(function() {
   $("#main").animate({opacity: 1});
+});
+$("#goto2").click(function() {
+  $("#1step").css({"display": "none"});
+  $("#2step").css({"display": "block"});
+});
+$("#goto3").click(function() {
+  $("#2step").css({"display": "none"});
+  $("#3step").css({"display": "block"});
+});
+$("#goto4").click(function() {
+  $("#3step").css({"display": "none"});
+  $("#4step").css({"display": "block"});
 });
 </script>
 
