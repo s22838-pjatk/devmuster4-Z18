@@ -63,8 +63,7 @@ def sync():
     result = []
     data = request.get_json()
     session_tracks = session.get('tracks')
-    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1'])])
-    print(session_tracks)
+    session_tracks[data['track']-1][3].append([int(data['append0']), int(data['append1']), int(data['time'])])
     session['tracks'] = session_tracks
     return redirect("/master_tape")
 
@@ -73,8 +72,7 @@ def sync_2():
     result = []
     data = request.get_json()
     session_tracks = session.get('tracks')
-    session_tracks[data['track']-1][3].remove([int(data['remove0']), int(data['remove1'])])
-    print(session_tracks)
+    session_tracks[data['track']-1][3].remove([int(data['remove0']), int(data['remove1']), int(data['time'])])
     session['tracks'] = session_tracks
     return redirect("/master_tape")
 
@@ -105,22 +103,23 @@ def guide_done():
 
 @app.route("/get_note")
 def get_note():
-    pitch = request.args.get('pitch')
     length = request.args.get('length')
 
-    mid = MidiFile()
-    track = MidiTrack()
-    mid.tracks.append(track)
-    track.append(Message('note_on', note=int(pitch), velocity=127, time=0))
-    track.append(Message('note_off', note=int(pitch), velocity=127, time=int(length)))
+    for i in range(24):
+        mid = MidiFile()
+        track = MidiTrack()
+        mid.tracks.append(track)
+        # track.append(Message('control_change', control=32, value=127, time=0))
+        # track.append(Message('program_change', program=25, time=0))
+        track.append(Message('note_on', note=48+i, velocity=90, time=0))
+        track.append(Message('note_off', note=48+i, velocity=90, time=length))
+        track.append(Message('note_off', note=48+i, velocity=90, time=2*length))
 
-    mid.save(session.get('username')+"/"+str(pitch)+'_'+str(length)+'.mid')
+        mid.save('temp.mid')
 
-    # using the default sound font in 44100 Hz sample rate
-    fs.midi_to_audio(
-        session.get('username')+"/"+str(pitch)+'_'+str(length)+'.mid',
-        session.get('username')+"/"+str(pitch)+'_'+str(length)+'.wav'
-    )
+        # using the default sound font in 44100 Hz sample rate
+        fs = FluidSynth('/Users/piotrek/Library/Audio/Sounds/Banks/fluid_r3_gm.sf2')
+        fs.midi_to_audio('temp.mid', "static/audio/piano/"+str(i)+"_"+str(length)+'.wav')
 
     return render_template('index.html')
 

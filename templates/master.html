@@ -251,6 +251,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 <script>
+var note_length = 250;
 var head_mode = 0;
 var muted_tracks = [];
 var track_length = 16;
@@ -335,8 +336,8 @@ function player_common() {
     row3_common=0;
   }
 }
-var player_start = setInterval(player, 250);
-var player_common_start = setInterval(player_common, 250);
+var player_start = setInterval(player, note_length);
+var player_common_start = setInterval(player_common, note_length);
 $(document).ready(function() {
   if(current_track>0){
     track_length = track_timings[current_track-1];
@@ -394,7 +395,8 @@ $("td").click(function() {
     var postData = {
       track: current_track,
       append0: item[1],
-      append1: item[0]
+      append1: item[0],
+      time:
     }
     $.ajax({
     url: "/sync",
@@ -405,7 +407,7 @@ $("td").click(function() {
 });
 } else if(head_mode==1){
   var item = $(this).closest("td").text().split("/");
-  $("#td"+item[1]+"_"+item[0]).css({"background-color": "red"});
+  $("#td"+item[1]+"_"+item[0]).css({"background-color": "orange"});
   pattern[current_track-1].push([item[1], item[0]]);
   var postData = {
     track: current_track,
