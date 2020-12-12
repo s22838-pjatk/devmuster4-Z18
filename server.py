@@ -28,8 +28,17 @@ def index():
 def master_tape():
     if not session.get('guide_passed') and session.get('logged_in'):
         return render_template('guide.html', username=session.get('username'))
-    elif not session.get('guide_passed') and session.get('logged_in'):
+    elif session.get('guide_passed') and session.get('logged_in'):
         return render_template('master.html', username=session.get('username'))
+    else:
+        return redirect('/')
+
+
+@app.route("/guide_done")
+def guide_done():
+    if not session.get('guide_passed') and session.get('logged_in'):
+        session['guide_passed'] = True
+        return redirect('/master_tape')
     else:
         return redirect('/')
 
