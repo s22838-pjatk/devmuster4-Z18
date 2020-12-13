@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
 from flask import Flask, render_template, redirect, request, send_from_directory, jsonify, session
-import glob
-import time
-import json
 from pydub import AudioSegment
 from midi2audio import FluidSynth
 from mido import Message, MidiFile, MidiTrack
