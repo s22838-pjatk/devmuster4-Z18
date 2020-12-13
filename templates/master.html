@@ -284,6 +284,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 </div>
 <script>
+const play_sound = new Audio();
 var note_length = 250;
 var head_mode = 0;
 var muted_tracks = [];
@@ -426,6 +427,7 @@ $(document).ready(function() {
 });
 {% for t in tracks %}
 $("#track_edit{{t[0]}}").click(function() {
+  play_sound.play();
   current_track = {{t[0]}};
   $("#bubble").css({'display': 'none'});
   $("#edit").css({'display': 'block'});
